@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    ports:
+    - 3000:3000
+    depends_on:
+    - db
+    env_file: .env
+  db:
+    image: mariadb:lts
+    volumes:
+      - data:/var/lib/mysql/
+      - ./initdb.d:/docker-entrypoint-initdb.d/
+    env_file: .env
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD_FILE: ${DB_PASS}
+
+volumes:
+  data: {}
+
